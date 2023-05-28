@@ -11,7 +11,6 @@ import java.util.List;
 
 @Entity
 @Table(name = "site")
-@NoArgsConstructor
 @Setter
 @Getter
 public class ModelSite {

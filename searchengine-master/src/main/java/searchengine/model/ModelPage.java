@@ -9,7 +9,6 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "page", indexes = {@Index(name = "path_index", columnList = "path")})
-@NoArgsConstructor
 @Setter
 @Getter
 public class ModelPage {

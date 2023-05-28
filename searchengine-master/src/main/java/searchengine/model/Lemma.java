@@ -9,7 +9,6 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "lemma", uniqueConstraints = @UniqueConstraint(columnNames = "lemma"))
-@NoArgsConstructor
 @Setter
 @Getter
 public class Lemma {

@@ -2,14 +2,12 @@ package searchengine.model;
 
 import com.sun.istack.NotNull;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
 
 @Entity
 @Table(name = "index_search")
-@NoArgsConstructor
 @Setter
 @Getter
 public class ModelIndex {

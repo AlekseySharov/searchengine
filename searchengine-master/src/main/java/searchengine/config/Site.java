@@ -10,4 +10,5 @@ import java.net.URL;
 public class Site {
     private URL url;
     private String name;
+    private int id;
 }
