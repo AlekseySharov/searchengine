@@ -474,7 +474,7 @@ $.fn.ajaxSubmit = function(options) {
 
         var CLIENT_TIMEOUT_ABORT = 1;
         var SERVER_ABORT = 2;
-                
+
         function getDoc(frame) {
             /* it looks like contentWindow or contentDocument do not
              * carry the protocol property in ie8, when running under ssl
@@ -482,9 +482,9 @@ $.fn.ajaxSubmit = function(options) {
              * the protocol is know but not on the other two objects. strange?
              * "Same origin policy" http://en.wikipedia.org/wiki/Same_origin_policy
              */
-            
+
             var doc = null;
-            
+
             // IE8 cascading access check
             try {
                 if (frame.contentWindow) {
@@ -624,7 +624,7 @@ $.fn.ajaxSubmit = function(options) {
             if (xhr.aborted || callbackProcessed) {
                 return;
             }
-            
+
             doc = getDoc(io);
             if(!doc) {
                 log('cannot access response document');
@@ -1268,7 +1268,7 @@ var form = function(){
                 $radio.on('change', function(){
                     changeTitle($this, $(this));
                 });
-                
+
             });
             $(document).on('click', function(e){
                 var $this = $(e.target);
@@ -1282,7 +1282,7 @@ var form = function(){
                     $('.selectList').removeClass('selectList_OPEN');
                 }
             });
-            
+
             // Валидация полей
             $input.on('blur', function(){
                 var $this = $(this),
@@ -1318,10 +1318,10 @@ var form = function(){
                                         message += 'Код должен состоять из 6 цифр';
                                         error = true;
                                 }
-            
+
                         }
                     });
-                    
+
                     if (error) {
                         if ($this.hasClass('form-input')){
                             $this.addClass('form-input_error');
@@ -1333,7 +1333,7 @@ var form = function(){
                             $this.after('<div class="form-error">'+message+'</div>');
                         } else {
                             $this.next('.form-error').text(message);
-            
+
                         }
                         $this.data('errorinput', true);
                     } else {
@@ -1348,7 +1348,7 @@ var form = function(){
             $form.on('submit', function(e){
                 var $this = $(this),
                     $validate = $this.find('[data-validate]');
-                
+
                 $validate.each(function(){
                     var $this = $(this);
                     $this.trigger('blur');
@@ -1457,7 +1457,7 @@ var API = function(){
             }
         });
     }
-    
+
     var send = {
         startIndexing:{
             address: '/startIndexing',
@@ -1528,12 +1528,12 @@ var API = function(){
             address: '/search',
             type: 'get',
             action: function(result, $this, data){
+                var $searchResults = $('.SearchResult'),
+                    $content = $searchResults.find('.SearchResult-content');
                 if (result.result){
                     if ($this.next('.API-error').length) {
                         $this.next('.API-error').remove();
                     }
-                    var $searchResults = $('.SearchResult'),
-                        $content = $searchResults.find('.SearchResult-content');
                     if (data.offset === 0) {
                         $content.empty();
                     }
@@ -1563,12 +1563,18 @@ var API = function(){
                     } else {
                         $('.SearchResult-footer').addClass('SearchResult-footer_hide')
                     }
-                    
+
                 } else {
                     if ($this.next('.API-error').length) {
                         $this.next('.API-error').text(result.error);
+                        $content.empty();
+                        $searchResults.find('.SearchResult-amount').text(result.count);
+                        $('.SearchResult-footer').addClass('SearchResult-footer_hide')
                     } else {
                         $this.after('<div class="API-error">' + result.error + '</div>');
+                        $content.empty();
+                        $searchResults.find('.SearchResult-amount').text(result.count);
+                        $('.SearchResult-footer').addClass('SearchResult-footer_hide')
                     }
                 }
             }
@@ -1581,7 +1587,7 @@ var API = function(){
                     if ($this.next('.API-error').length) {
                         $this.next('.API-error').remove();
                     }
-    
+
                     var $statistics = $('.Statistics');
                     $statistics.find('.HideBlock').not('.Statistics-example').remove();
                     $('#totalSites').text(result.statistics.total.sites);
@@ -1601,7 +1607,7 @@ var API = function(){
                             case 'INDEXING':
                                 statusClass = 'Statistics-status_pause';
                                 break;
-                            
+
                         }
                         $('select[name="site"]').append('' +
                             '<option value="' + site.url + '">' +
@@ -1625,8 +1631,8 @@ var API = function(){
                                 '</div><div class="Statistics-option"><strong>Lemmas:</strong> ' + site.lemmas +
                                 '</div><div class="Statistics-option Statistics-option_error"><strong>Error:</strong> ' + site.error + '</div>'+
                                 '')
-    
-                        
+
+
                         $statistics.append($blockSiteExample);
                         var $thisHideBlock = $statistics.find('.HideBlock').last();
                         $thisHideBlock.on('click', HideBlock().trigger);
@@ -1660,7 +1666,7 @@ var API = function(){
                             .addClass('btn_check')
                         $('.UpdatePageBlock').hide(0)
                     }
-    
+
                 } else {
                     if ($this.next('.API-error').length) {
                         $this.next('.API-error').text(result.error);
@@ -1737,7 +1743,7 @@ var API = function(){
                 if (($this.hasClass('form') && e.type==='submit')
                     || (e.type==='click' && !$this.hasClass('form'))){
                     e.preventDefault();
-                    
+
                     switch ($this.data('send')) {
                         case 'indexPage':
                             var $page = $this.closest('.form').find('input[name="page"]');
@@ -1762,7 +1768,7 @@ var API = function(){
                                 }
                             }
                             break;
-        
+
                     }
                     sendData(
                         send[$this.data('send')].address,

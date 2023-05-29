@@ -24,10 +24,7 @@ import searchengine.services.ApiService;
 import searchengine.services.LemmaService;
 import searchengine.services.PageIndexer;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -65,6 +62,8 @@ public class ApiServiceImpl implements ApiService {
                 .body(SearchResult.builder()
                         .result(Boolean.FALSE)
                         .error(message)
+                        .data(Collections.emptyList())
+                        .count(0L)
                         .build());
     }
 
@@ -86,19 +85,19 @@ public class ApiServiceImpl implements ApiService {
         }
 
         Long amountOfWordsInSiteByQuery = getAmountOfWordsInSiteByQuery(siteToSearch, query);
-        List<Lemma> lemmas = lemmaRepository.findByLemmaContainingIgnoreCaseAndSiteIdWithLimit(query, siteToSearch.getId(), offset, limit);
+        List<Lemma> lemmas = lemmaRepository.findByLemmaContainingIgnoreCaseAndSiteId(query, siteToSearch.getId());
         List<Integer> lemmasIdsList = lemmas.stream()
                 .map(Lemma::getId)
                 .toList();
 
-        List<ModelIndex> modelIndexByLemmaIdInAndPageSiteId = indexSearchRepository.findModelIndexByLemmaIdInAndPage_SiteId(lemmasIdsList, siteToSearch.getId());
+        List<ModelIndex> modelIndexByLemmaIdInAndPageSiteId = indexSearchRepository.findModelIndexByLemmaIdInAndPage_SiteIdWithLimit(lemmasIdsList, siteToSearch.getId(), offset, limit);
 
         List<SearchResultItem> searchResultItems = getSearchResultItems(siteToSearch, modelIndexByLemmaIdInAndPageSiteId, amountOfWordsInSite, query);
 
         return ResponseEntity.ok()
                 .body(SearchResult.builder()
                         .result(Boolean.TRUE)
-                        .count(amountOfWordsInSiteByQuery)
+                        .count(amountOfWordsInSiteByQuery != null ? amountOfWordsInSiteByQuery : 0L)
                         .data(searchResultItems)
                         .build());
     }

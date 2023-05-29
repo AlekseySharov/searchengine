@@ -24,21 +24,7 @@ public interface LemmaRepository extends JpaRepository<Lemma, Integer> {
 
     long countBySiteId(int siteId);
 
-    List<Lemma> findByLemmaContainingIgnoreCaseAndSiteId(String lemma, int siteId, Pageable pageable);
-
-    default List<Lemma> findByLemmaContainingIgnoreCaseAndSiteIdWithLimit(String lemma, int siteId, Integer offset, Integer count) {
-        Pageable pageable;
-        if (offset == null && count == null) { // Если оба параметра null, то выбираем все записи
-            pageable = Pageable.unpaged();
-        } else if (offset == null) { // Если offset null, то начинаем выборку с первой записи
-            pageable = PageRequest.of(0, count);
-        } else if (count == null) { // Если count null, то выбираем все записи, начиная с заданного offset
-            pageable = PageRequest.of(offset, Integer.MAX_VALUE);
-        } else { // Если оба параметра заданы, то выбираем записи с заданным сдвигом и количеством
-            pageable = PageRequest.of(offset, count);
-        }
-        return findByLemmaContainingIgnoreCaseAndSiteId(lemma, siteId, pageable);
-    }
+    List<Lemma> findByLemmaContainingIgnoreCaseAndSiteId(String lemma, int siteId);
 
     @Query("SELECT SUM(l.frequency) FROM Lemma l WHERE l.siteId = :siteId")
     Long sumFrequencyBySiteId(@Param("siteId") Integer siteId);

@@ -38,13 +38,12 @@ public class ApiController {
     @GetMapping("/startIndexing")
     public ResponseEntity startIndexing() {
         if (indexingProcessing.get()) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body("'result' : false, " +
-                    "'error' : Индексация уже запущена");
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("{\"result\": false, \"error\": \"Индексация уже запущена\"}");
         } else {
             indexingProcessing.set(true);
             Runnable start = () -> apiService.startIndexing(indexingProcessing);
             new Thread(start).start();
-            return ResponseEntity.status(HttpStatus.OK).body("'result' : true");
+            return ResponseEntity.status(HttpStatus.OK).body("{\"result\": true}");
         }
     }
 
@@ -52,10 +51,10 @@ public class ApiController {
     public ResponseEntity stopIndexing() {
         if (!indexingProcessing.get()) {
             return ResponseEntity.status(HttpStatus.METHOD_NOT_ALLOWED).body("'result' : false, " +
-                    "'error' : Индексация не запущена");
+                    "{\"result\": false, \"error\": \"Индексация не запущена\"}");
         } else {
             indexingProcessing.set(false);
-            return ResponseEntity.status(HttpStatus.OK).body("'result' : true ");
+            return ResponseEntity.status(HttpStatus.OK).body("{\"result\": true}");
         }
     }
 
